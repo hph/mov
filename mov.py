@@ -31,7 +31,6 @@ Options:
 __version__ = '0.0.1'
 
 import os
-import subprocess
 import sqlite3
 
 try:
@@ -114,7 +113,7 @@ def play():
         connection.text_factory = str
         cursor = connection.cursor()
         if args.pattern:
-            cursor.execute('''SELECT * FROM Movies WHERE Name LIKE (?)''',
+            cursor.execute('SELECT * FROM Movies WHERE Name LIKE (?)',
                            [args.pattern])
             try:
                 path = [row for row in cursor][0][1]
