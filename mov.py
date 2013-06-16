@@ -111,7 +111,7 @@ def ls():
             print 'Name:\t\t{0}'.format(movie[0])
             print 'Location:\t{0}'.format(movie[1])
             print 'Size:\t\t{0}'.format(prefix_size(int(movie[2])))
-            print 'Files:\t\t{0}'.format(movie[3])
+            print 'Files:\t\t{0}'.format(', '.join(movie[3].split('##')))
             if not i == len(movies) - 1:
                 print
 
