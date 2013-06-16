@@ -1,7 +1,7 @@
 The MIT License
 ===============
 
-Copyright (C) 2012 Haukur Páll Hallvarðsson
+Copyright (C) 2013 Haukur Páll Hallvarðsson
 -------------------------------------------
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
