@@ -39,12 +39,21 @@ except ImportError, error:
     exit('Error: {0}. Install it with "pip install docopt".'.format(error))
 
 
+def get_size(path):
+    '''Return the size of path in bytes if it exists and can be determined.'''
+    size = os.path.getsize(path)
+    for item in os.walk(path):
+        for file in item[2]:
+            size += os.path.getsize(os.path.join(item[0], file))
+    return size
+
+
 def local_data(path):
     """Return tuples of names, directories, total sizes and files. Each
        directory represents a single film and the files are the files contained
        in the directory, such as video, audio and subtitle files."""
     dirs = [os.path.join(path, item) for item in os.listdir(path)]
-    names, sizes, files = zip(*[(dir.split('/')[-1], str(os.path.getsize(dir)),
+    names, sizes, files = zip(*[(dir.split('/')[-1], str(get_size(dir)),
                                  '##'.join([file for file in os.listdir(dir)]))
                                 for dir in dirs])
     return zip(names, dirs, sizes, files)
