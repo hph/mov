@@ -4,6 +4,7 @@
 """
 Usage:
   mov create [options] DIRECTORY ...
+  mov update [options] DIRECTORY ...
   mov ls [options] [PATTERN]
   mov play [options] [PATTERN]
   mov -h | --help
@@ -12,6 +13,8 @@ Usage:
 Commands:
   create               Create a new database with information about the films
                        in the specified directory or directories.
+  update               Update an existing database. Old items that are not
+                       found are deleted.
   ls                   List movies and relevant metadata optionally only
                        showing those that match a specified pattern.
   play                 Open matching movie with a media player.
@@ -71,6 +74,13 @@ def create():
                           local_data(dir))
 
 
+def update():
+    """Update an existing database. Old items that are not found are
+       deleted."""
+    # Temporarily use the same method to create and update a database.
+    return create
+
+
 def ls():
     """List all items in the database in a predefined format."""
     if not os.path.exists(args.database):
@@ -121,6 +131,6 @@ if __name__ == '__main__':
     args = {arg.lower().replace('--', ''): args_dict[arg] for arg in args_dict}
     # Make arguments available in a namespace.
     args = type('Namespace', (object,), args)
-    commands = ('create', 'ls', 'play')
+    commands = ('create', 'update', 'ls', 'play')
     # Call the respective function for the command entered.
     locals()[[command for command in commands if args_dict[command]][0]]()
