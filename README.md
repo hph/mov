@@ -12,30 +12,31 @@ With **mov** you can browse your movie collection via a command-line interface.
         └── The Big Lebowski.mkv
 
 Here *root_dir* just stands for the name of the root directory, which doesn't
-matter to **mov**. However, every top-level subdirectory (e.g. The Godfather
+matter to **mov**. However, every top-level subdirectory (e.g., The Godfather
 and The Big Lebowski) is treated as a directory containing a movie and the
 names of movies in **mov**) are based on the name of these subdirectories so
 it is important that they are carefully named.
 
 ## Setup
 
-Simply clone the repository and create a symbolic link to mov.py in /usr/bin:
+You must install docopt if you haven't already:
+
+    pip install docopt
+
+Now clone the repository, move it to your home directory, make it executable
+and create a symbolic link to mov.py in /usr/bin/mov:
 
     git clone git@github.com:hph/mov.git
     mv mov/ ~/.mov
     chmod +x ~/.mov/mov.py
     sudo ln -s ~/.mov/mov.py /usr/bin/mov
 
-Now you can create a database for these movies:
+Create a database for the movies in the example above:
 
     mov create root_dir
 
 The database will be created in your working directory if you don't specify it
 explicitly with the `--database` option.
-
-Note that you must install docopt if you don't already have it installed:
-
-    pip install docopt
 
 ## Usage
 
