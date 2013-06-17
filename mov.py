@@ -126,7 +126,10 @@ def play():
                            [args.pattern])
             try:
                 path = [row for row in cursor][0][1]
-                os.system('{0} "{1}"'.format(args.player, path))
+                replace_map = {' ': '\\ ', '"': '\\"', "'": "\\'"}
+                for key, val in replace_map.iteritems():
+                    path = path.replace(key, val)
+                os.system('{0} {1} &'.format(args.player, path))
             except IndexError:
                 exit('Error: Movie not found.')
 
