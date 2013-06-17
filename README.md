@@ -78,3 +78,14 @@ running `mov -h`:
   movie.
 * Run `mov ls --name | wc -l` to count the number of movies in your database.
 * Run `mov ls | grep pattern` to search for "pattern".
+
+## To do
+
+* Improve the way data is displayed.
+* Use IMDbPy to retrieve information about movies.
+* Allow marking movies as seen or unseen.
+* Add rating movies.
+* Implement a watchlist (mark as "watch this").
+* Use SQLAlchemy to build a movies model for a better API.
+* Search for and get magnet to download movies.
+* Show statistics: number of movies, total size, formats, etc.
