@@ -22,7 +22,7 @@ Commands:
   play                 Open matching movie with a media player.
 
 Options:
-  --database=DATABASE  Database to save film metadata [default: mov.db].
+  --database=DATABASE  Database to save film metadata [default: ~/.mov.db].
   --force              Do not prompt for a confirmation upon database
                        destruction.
   --strict             Only show exact matches.
@@ -166,7 +166,8 @@ if __name__ == '__main__':
     # Make arguments available in a namespace.
     args = type('Namespace', (object,), args)
     # Resolve ~ to the user's home directory if applicable.
-    args.database = os.path.expanduser(args.database)
+    if args.database[0] == '~':
+        args.database = os.path.expanduser('~') + args.database[1:]
     commands = ('create', 'update', 'destroy', 'ls', 'play')
     # Call the respective function for the command entered.
     locals()[[command for command in commands if args_dict[command]][0]]()
