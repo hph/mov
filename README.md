@@ -35,8 +35,8 @@ Create a database for the movies in the example above:
 
     mov create root_dir
 
-The database will be created in your working directory if you don't specify it
-explicitly with the `--database` option.
+The database will be created in your home directory (~/.mov.db) if you don't
+specify it explicitly with the `--database` option.
 
 ## Usage
 
@@ -62,7 +62,7 @@ running `mov -h`:
       play                 Open matching movie with a media player.
 
     Options:
-      --database=DATABASE  Database to save film metadata [default: mov.db].
+      --database=DATABASE  Database to save film metadata [default: ~/.mov.db].
       --name               Only show movie names when listing movies.
       --player=PLAYER      Media player to open movies with [default: vlc].
       --strict             Only list exact matches.

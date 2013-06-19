@@ -20,7 +20,7 @@ Commands:
   play                 Open matching movie with a media player.
 
 Options:
-  --database=DATABASE  Database to save film metadata [default: mov.db].
+  --database=DATABASE  Database to save film metadata [default: ~/.mov.db].
   --name               Only show movie names when listing movies.
   --player=PLAYER      Media player to open movies with [default: vlc].
   --strict             Only list exact matches.
@@ -142,6 +142,8 @@ if __name__ == '__main__':
     args = {arg.lower().replace('--', ''): args_dict[arg] for arg in args_dict}
     # Make arguments available in a namespace.
     args = type('Namespace', (object,), args)
+    # Resolve ~ to the user's home directory if applicable.
+    args.database = os.path.expanduser(args.database)
     commands = ('create', 'update', 'ls', 'play')
     # Call the respective function for the command entered.
     locals()[[command for command in commands if args_dict[command]][0]]()
