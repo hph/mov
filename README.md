@@ -47,6 +47,7 @@ running `mov -h`:
     Usage:
       mov create [options] DIRECTORY ...
       mov update [options] DIRECTORY ...
+      mov destroy [options]
       mov ls [options] [PATTERN]
       mov play [options] [PATTERN]
       mov -h | --help
@@ -57,15 +58,21 @@ running `mov -h`:
                            in the specified directory or directories.
       update               Update an existing database. Old items that are not
                            found are deleted.
+      destroy              Destroy a database.
       ls                   List movies and relevant metadata optionally only
                            showing those that match a specified pattern.
       play                 Open matching movie with a media player.
 
     Options:
       --database=DATABASE  Database to save film metadata [default: ~/.mov.db].
-      --name               Only show movie names when listing movies.
+      --force              Do not prompt for a confirmation upon database
+                           destruction.
+      --strict             Only show exact matches.
+      --name               Only show the name of the movie.
+      --location           Only show the location of the movie.
+      --size               Only show the size of the movie.
+      --files              Only show the files of the movie.
       --player=PLAYER      Media player to open movies with [default: vlc].
-      --strict             Only list exact matches.
       -h, --help           Show this help message and exit.
       --version            Show version.
 
