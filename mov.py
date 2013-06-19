@@ -5,6 +5,7 @@
 Usage:
   mov create [options] DIRECTORY ...
   mov update [options] DIRECTORY ...
+  mov destroy [options]
   mov ls [options] [PATTERN]
   mov play [options] [PATTERN]
   mov -h | --help
@@ -15,15 +16,21 @@ Commands:
                        in the specified directory or directories.
   update               Update an existing database. Old items that are not
                        found are deleted.
+  destroy              Destroy a database.
   ls                   List movies and relevant metadata optionally only
                        showing those that match a specified pattern.
   play                 Open matching movie with a media player.
 
 Options:
-  --database=DATABASE  Database to save film metadata [default: ~/.mov.db].
-  --name               Only show movie names when listing movies.
+  --database=DATABASE  Database to save film metadata [default: mov.db].
+  --force              Do not prompt for a confirmation upon database
+                       destruction.
+  --strict             Only show exact matches.
+  --name               Only show the name of the movie.
+  --location           Only show the location of the movie.
+  --size               Only show the size of the movie.
+  --files              Only show the files of the movie.
   --player=PLAYER      Media player to open movies with [default: vlc].
-  --strict             Only list exact matches.
   -h, --help           Show this help message and exit.
   --version            Show version.
 """
@@ -89,6 +96,16 @@ def update():
     return create
 
 
+def destroy():
+    """Destroy a database."""
+    if not os.path.exists(args.database):
+        exit('Error: The database does not exist; you must create it first.')
+    if args.force:
+        os.remove(args.database)
+    elif raw_input('Destroy {0} [y/n]? '.format(args.database)) in ('y', 'Y'):
+        os.remove(args.database)
+
+
 def ls():
     """List all items in the database in a predefined format."""
     if not os.path.exists(args.database):
@@ -106,6 +123,12 @@ def ls():
         movies = [row for row in c]
     if args.name:
         print '\n'.join([movie[0] for movie in movies])
+    elif args.location:
+        print '\n'.join([movie[1] for movie in movies])
+    elif args.size:
+        print '\n'.join([movie[2] for movie in movies])
+    elif args.files:
+        print '\n'.join([movie[3] for movie in movies])
     else:
         for i, movie in enumerate(movies):
             print 'Name:\t\t{0}'.format(movie[0])
@@ -144,6 +167,6 @@ if __name__ == '__main__':
     args = type('Namespace', (object,), args)
     # Resolve ~ to the user's home directory if applicable.
     args.database = os.path.expanduser(args.database)
-    commands = ('create', 'update', 'ls', 'play')
+    commands = ('create', 'update', 'destroy', 'ls', 'play')
     # Call the respective function for the command entered.
     locals()[[command for command in commands if args_dict[command]][0]]()
