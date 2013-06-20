@@ -25,11 +25,11 @@ Options:
   --database=DATABASE  Database to save film metadata [default: ~/.mov.db].
   --force              Do not prompt for a confirmation upon database
                        destruction.
-  --strict             Only show exact matches.
-  --name               Only show the name of the movie.
-  --location           Only show the location of the movie.
-  --size               Only show the size of the movie.
-  --files              Only show the files of the movie.
+  -s, --strict         Only show exact matches.
+  -n, --name           Only show the name of the movie.
+  -l, --location       Only show the location of the movie.
+  -S, --size           Only show the size of the movie.
+  -f, --files          Only show the files of the movie.
   --player=PLAYER      Media player to open movies with [default: vlc].
   -h, --help           Show this help message and exit.
   --version            Show version.
@@ -80,13 +80,13 @@ def create():
         exit('Error: One or more of the specified directories does not exist.')
     with sqlite3.connect(args.database) as connection:
         connection.text_factory = str
-        c = connection.cursor()
-        c.execute('DROP TABLE IF EXISTS Movies')
-        c.execute('''CREATE TABLE movies(name TEXT, path TEXT, size TEXT,
-                     files BLOB)''')
+        cursor = connection.cursor()
+        cursor.execute('DROP TABLE IF EXISTS Movies')
+        cursor.execute('''CREATE TABLE movies(name TEXT, path TEXT, size TEXT,
+                          files BLOB)''')
         for dir in args.directory:
-            c.executemany('INSERT INTO Movies VALUES(?, ?, ?, ?)',
-                          local_data(dir))
+            cursor.executemany('INSERT INTO Movies VALUES(?, ?, ?, ?)',
+                               local_data(dir))
 
 
 def update():
@@ -112,21 +112,21 @@ def ls():
         exit('Error: The database does not exist; you must create it first.')
     with sqlite3.connect(args.database) as connection:
         connection.text_factory = str
-        c = connection.cursor()
+        cursor = connection.cursor()
         if args.pattern:
             if not args.strict:
                 args.pattern = '%{0}%'.format(args.pattern)
-            c.execute('SELECT * FROM Movies WHERE Name LIKE (?)',
+            cursor.execute('SELECT * FROM Movies WHERE Name LIKE (?)',
                       [args.pattern])
         else:
-            c.execute('SELECT * FROM Movies')
-        movies = [row for row in c]
+            cursor.execute('SELECT * FROM Movies')
+        movies = [row for row in cursor]
     if args.name:
         print '\n'.join([movie[0] for movie in movies])
     elif args.location:
         print '\n'.join([movie[1] for movie in movies])
     elif args.size:
-        print '\n'.join([movie[2] for movie in movies])
+        print '\n'.join([prefix_size(int(movie[2])) for movie in movies])
     elif args.files:
         print '\n'.join([movie[3] for movie in movies])
     else:

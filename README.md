@@ -67,11 +67,11 @@ running `mov -h`:
       --database=DATABASE  Database to save film metadata [default: ~/.mov.db].
       --force              Do not prompt for a confirmation upon database
                            destruction.
-      --strict             Only show exact matches.
-      --name               Only show the name of the movie.
-      --location           Only show the location of the movie.
-      --size               Only show the size of the movie.
-      --files              Only show the files of the movie.
+      -s, --strict         Only show exact matches.
+      -n, --name           Only show the name of the movie.
+      -l, --location       Only show the location of the movie.
+      -S, --size           Only show the size of the movie.
+      -f, --files          Only show the files of the movie.
       --player=PLAYER      Media player to open movies with [default: vlc].
       -h, --help           Show this help message and exit.
       --version            Show version.
