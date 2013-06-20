@@ -145,6 +145,8 @@ def play():
         connection.text_factory = str
         cursor = connection.cursor()
         if args.pattern:
+            if not args.strict:
+                args.pattern = '%{0}%'.format(args.pattern)
             cursor.execute('SELECT * FROM Movies WHERE Name LIKE (?)',
                            [args.pattern])
             try:
