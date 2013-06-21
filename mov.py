@@ -128,7 +128,7 @@ def ls():
     elif args.size:
         print '\n'.join([prefix_size(int(movie[2])) for movie in movies])
     elif args.files:
-        print '\n'.join([movie[3] for movie in movies])
+        print '\n'.join([movie[3].split('##')[0] for movie in movies])
     else:
         for i, movie in enumerate(movies):
             print 'Name:\t\t{0}'.format(movie[0])
