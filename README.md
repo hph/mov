@@ -61,7 +61,7 @@ running `mov -h`:
       destroy              Destroy a database.
       ls                   List movies and relevant metadata optionally only
                            showing those that match a specified pattern.
-      play                 Open matching movie with a media player.
+      play                 Open the first matching movie with a media player.
 
     Options:
       --database=DATABASE  Database to save film metadata [default: ~/.mov.db].
