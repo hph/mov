@@ -76,15 +76,15 @@ def prefix_size(size, base=1024):
 def create():
     """Create a new database with information about the films in the specified
        directory or directories."""
-    if not all(map(os.path.isdir, args.directory)):
+    if not all(map(os.path.isdir, ARGS.directory)):
         exit('Error: One or more of the specified directories does not exist.')
-    with sqlite3.connect(args.database) as connection:
+    with sqlite3.connect(ARGS.database) as connection:
         connection.text_factory = str
         cursor = connection.cursor()
         cursor.execute('DROP TABLE IF EXISTS Movies')
         cursor.execute('''CREATE TABLE movies(name TEXT, path TEXT, size TEXT,
                           files BLOB)''')
-        for dir in args.directory:
+        for dir in ARGS.directory:
             cursor.executemany('INSERT INTO Movies VALUES(?, ?, ?, ?)',
                                local_data(dir))
 
@@ -98,36 +98,36 @@ def update():
 
 def destroy():
     """Destroy a database."""
-    if not os.path.exists(args.database):
+    if not os.path.exists(ARGS.database):
         exit('Error: The database does not exist; you must create it first.')
-    if args.force:
-        os.remove(args.database)
-    elif raw_input('Destroy {0} [y/n]? '.format(args.database)) in ('y', 'Y'):
-        os.remove(args.database)
+    if ARGS.force:
+        os.remove(ARGS.database)
+    elif raw_input('Destroy {0} [y/n]? '.format(ARGS.database)) in ('y', 'Y'):
+        os.remove(ARGS.database)
 
 
 def ls():
     """List all items in the database in a predefined format."""
-    if not os.path.exists(args.database):
+    if not os.path.exists(ARGS.database):
         exit('Error: The database does not exist; you must create it first.')
-    with sqlite3.connect(args.database) as connection:
+    with sqlite3.connect(ARGS.database) as connection:
         connection.text_factory = str
         cursor = connection.cursor()
-        if args.pattern:
-            if not args.strict:
-                args.pattern = '%{0}%'.format(args.pattern)
+        if ARGS.pattern:
+            if not ARGS.strict:
+                ARGS.pattern = '%{0}%'.format(ARGS.pattern)
             cursor.execute('SELECT * FROM Movies WHERE Name LIKE (?)',
-                      [args.pattern])
+                      [ARGS.pattern])
         else:
             cursor.execute('SELECT * FROM Movies')
         movies = [row for row in cursor]
-    if args.name:
+    if ARGS.name:
         print '\n'.join([movie[0] for movie in movies])
-    elif args.location:
+    elif ARGS.location:
         print '\n'.join([movie[1] for movie in movies])
-    elif args.size:
+    elif ARGS.size:
         print '\n'.join([prefix_size(int(movie[2])) for movie in movies])
-    elif args.files:
+    elif ARGS.files:
         print '\n'.join([movie[3].split('##')[0] for movie in movies])
     else:
         for i, movie in enumerate(movies):
@@ -141,20 +141,20 @@ def ls():
 
 def play():
     """Open the matched movie with a media player."""
-    with sqlite3.connect(args.database) as connection:
+    with sqlite3.connect(ARGS.database) as connection:
         connection.text_factory = str
         cursor = connection.cursor()
-        if args.pattern:
-            if not args.strict:
-                args.pattern = '%{0}%'.format(args.pattern)
+        if ARGS.pattern:
+            if not ARGS.strict:
+                ARGS.pattern = '%{0}%'.format(ARGS.pattern)
             cursor.execute('SELECT * FROM Movies WHERE Name LIKE (?)',
-                           [args.pattern])
+                           [ARGS.pattern])
             try:
                 path = [row for row in cursor][0][1]
                 replace_map = {' ': '\\ ', '"': '\\"', "'": "\\'"}
                 for key, val in replace_map.iteritems():
                     path = path.replace(key, val)
-                os.system('{0} {1} &'.format(args.player, path))
+                os.system('{0} {1} &'.format(ARGS.player, path))
             except IndexError:
                 exit('Error: Movie not found.')
 
@@ -162,18 +162,18 @@ def play():
 if __name__ == '__main__':
     # If the arguments are not valid (as defined in __doc__) the program exits.
     args_dict = docopt(__doc__, version='mov {0}'.format(__version__))
-    global args
+    global ARGS
     # Clean key names for later namespace use.
-    args = {arg.lower().replace('--', ''): args_dict[arg] for arg in args_dict}
+    ARGS = {arg.lower().replace('--', ''): args_dict[arg] for arg in args_dict}
     # Make arguments available in a namespace.
-    args = type('Namespace', (object,), args)
+    ARGS = type('Namespace', (object,), ARGS)
     # Resolve ~ to the user's home directory if applicable.
-    if args.database[0] == '~':
-        args.database = os.path.expanduser('~') + args.database[1:]
-    if len(args.pattern) > 1:
-        args.pattern = ' '.join(args.pattern)
-    elif len(args.pattern):
-        args.pattern = args.pattern[0]
+    if ARGS.database[0] == '~':
+        ARGS.database = os.path.expanduser('~') + ARGS.database[1:]
+    if len(ARGS.pattern) > 1:
+        ARGS.pattern = ' '.join(ARGS.pattern)
+    elif len(ARGS.pattern):
+        ARGS.pattern = ARGS.pattern[0]
     commands = ('create', 'update', 'destroy', 'ls', 'play')
     # Call the respective function for the command entered.
     locals()[[command for command in commands if args_dict[command]][0]]()
