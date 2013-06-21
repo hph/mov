@@ -6,8 +6,8 @@ Usage:
   mov create [options] DIRECTORY ...
   mov update [options] DIRECTORY ...
   mov destroy [options]
-  mov ls [options] [PATTERN]
-  mov play [options] [PATTERN]
+  mov ls [options] [PATTERN ...]
+  mov play [options] [PATTERN ...]
   mov -h | --help
   mov --version
 
@@ -170,6 +170,11 @@ if __name__ == '__main__':
     # Resolve ~ to the user's home directory if applicable.
     if args.database[0] == '~':
         args.database = os.path.expanduser('~') + args.database[1:]
+    if args.pattern:
+        if len(args.pattern) > 1:
+            args.pattern = ' '.join(args.pattern)
+        else:
+            args.pattern = args.pattern[0]
     commands = ('create', 'update', 'destroy', 'ls', 'play')
     # Call the respective function for the command entered.
     locals()[[command for command in commands if args_dict[command]][0]]()

@@ -48,8 +48,8 @@ running `mov -h`:
       mov create [options] DIRECTORY ...
       mov update [options] DIRECTORY ...
       mov destroy [options]
-      mov ls [options] [PATTERN]
-      mov play [options] [PATTERN]
+      mov ls [options] [PATTERN ...]
+      mov play [options] [PATTERN ...]
       mov -h | --help
       mov --version
 
