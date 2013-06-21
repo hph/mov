@@ -66,11 +66,11 @@ def local_data(path):
     return zip(names, dirs, sizes, files)
 
 
-def prefix_size(size, multiple=1024):
+def prefix_size(size, base=1024):
     '''Return size in B (bytes), kB, MB, GB or TB.'''
-    for i, pref in enumerate(['', 'ki', 'Mi', 'Gi', 'Ti']):
-        if size < pow(multiple, i + 1):
-            return '%s %sB' % (round(float(size) / pow(multiple, i), 1), pref)
+    for i, p in enumerate(['', 'ki', 'Mi', 'Gi', 'Ti']):
+        if size < pow(base, i + 1):
+            return '{0} {1}B'.format(round(float(size) / pow(base, i), 1), p)
 
 
 def create():
