@@ -170,11 +170,10 @@ if __name__ == '__main__':
     # Resolve ~ to the user's home directory if applicable.
     if args.database[0] == '~':
         args.database = os.path.expanduser('~') + args.database[1:]
-    if args.pattern:
-        if len(args.pattern) > 1:
-            args.pattern = ' '.join(args.pattern)
-        else:
-            args.pattern = args.pattern[0]
+    if len(args.pattern) > 1:
+        args.pattern = ' '.join(args.pattern)
+    elif len(args.pattern):
+        args.pattern = args.pattern[0]
     commands = ('create', 'update', 'destroy', 'ls', 'play')
     # Call the respective function for the command entered.
     locals()[[command for command in commands if args_dict[command]][0]]()
