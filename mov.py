@@ -159,7 +159,7 @@ def play():
                 exit('Error: Movie not found.')
 
 
-if __name__ == '__main__':
+def main():
     # If the arguments are not valid (as defined in __doc__) the program exits.
     args_dict = docopt(__doc__, version='mov {0}'.format(__version__))
     global ARGS
@@ -177,3 +177,7 @@ if __name__ == '__main__':
     commands = ('create', 'update', 'destroy', 'ls', 'play')
     # Call the respective function for the command entered.
     locals()[[command for command in commands if args_dict[command]][0]]()
+
+
+if __name__ == '__main__':
+    main()
