@@ -176,7 +176,7 @@ def main():
         ARGS.pattern = ARGS.pattern[0]
     commands = ('create', 'update', 'destroy', 'ls', 'play')
     # Call the respective function for the command entered.
-    locals()[[command for command in commands if args_dict[command]][0]]()
+    globals()[[command for command in commands if args_dict[command]][0]]()
 
 
 if __name__ == '__main__':
