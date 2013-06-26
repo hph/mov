@@ -82,7 +82,7 @@ def create():
         connection.text_factory = str
         cursor = connection.cursor()
         cursor.execute('DROP TABLE IF EXISTS Movies')
-        cursor.execute('''CREATE TABLE movies(name TEXT, path TEXT, size TEXT,
+        cursor.execute('''CREATE TABLE Movies(name TEXT, path TEXT, size TEXT,
                           files BLOB)''')
         for dir in ARGS.directory:
             cursor.executemany('INSERT INTO Movies VALUES(?, ?, ?, ?)',
@@ -128,7 +128,8 @@ def ls():
     elif ARGS.size:
         print '\n'.join([prefix_size(int(movie[2])) for movie in movies])
     elif ARGS.files:
-        print '\n'.join([movie[3].split('##')[0] for movie in movies])
+        for movie in sorted(movies):
+            print ', '.join(movie[3].split('##'))
     else:
         for i, movie in enumerate(movies):
             print 'Name:\t\t{0}'.format(movie[0])
