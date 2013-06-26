@@ -1,91 +1,55 @@
 mov
 ===
 
-With **mov** you can browse your movie collection via a command-line interface.
+**mov** is a command-line application to browse your movie collection.
 
-**mov** expects your movies directory to look something like this:
-
-    root_dir
-    ├── The Godfather
-    |   └── The Godfather.mkv
-    └── The Big Lebowski
-        └── The Big Lebowski.mkv
-
-Here *root_dir* just stands for the name of the root directory, which doesn't
-matter to **mov**. However, every top-level subdirectory (e.g., The Godfather
-and The Big Lebowski) is treated as a directory containing a movie and the
-names of movies in **mov**) are based on the name of these subdirectories so
-it is important that they are carefully named.
+* List movies: `mov ls | less`
+* List specific movies: `mov ls the godfather`
+* Play a movie: `mov play the godfather`
 
 ## Setup
 
-You must install docopt if you haven't already:
+Run the following commands to download and install **mov**. You may be required
+to enter your password.
 
-    pip install docopt
-
-Now clone the repository, move it to your home directory, make it executable
-and create a symbolic link to mov.py in /usr/bin/mov:
-
-    git clone git@github.com:hph/mov.git
-    mv mov/ ~/.mov
-    chmod +x ~/.mov/mov.py
-    sudo ln -s ~/.mov/mov.py /usr/bin/mov
-
-Create a database for the movies in the example above:
-
-    mov create root_dir
-
-The database will be created in your home directory (~/.mov.db) if you don't
-specify it explicitly with the `--database` option.
+    bash <(wget -qO- https://raw.github.com/hph/mov/master/setup.sh)
 
 ## Usage
 
-Create a new database for your movies collection, assuming it is located in the
-directory as specified below:
+We will assume that `~/Movies` is a directory containing subdirectories,
+themselves containing movies and related files, e.g., running `tree ~/Movies`
+should show something like this:
+    
+    ~/Movies
+    ├── 12 Angry Men
+    │   └── 12 Angry Men.mkv
+    ├── 2001 - A Space Odyssey
+    │   └── 2001 - A Space Odyssey.mkv
+    ...
 
-    mov create /home/$USER/Movies
+First you will have to create a database of your movies:
 
-List movies:
+    mov create ~/Movies
 
-    mov ls | less
+Now watch a movie:
 
-This allows you to browse your movies with the keys `j` and `k` and search with
-`/` and `?`. Press `q` to quit. Get more info by running `man less`.
+    mov play odyssey
 
-List movies matching a pattern (quotes around the name are not required):
+Run `mov -h` to show what else you can do.
 
-    mov ls The Godfather
-    Name:       The Godfather
-    Location:   /media/b/movies/The Godfather
-    Size:       20544.9 MB
-    Files:      The Godfather.mkv
+## Unix trickery
 
-    Name:       The Godfather - Part II
-    Location:   /media/b/movies/The Godfather - Part II
-    Size:       20591.0 MB
-    Files:      The Godfather - Part II.mkv
+**mov** is desinged in such a way as to be usable with standard Unix utilities.
 
-    Name:       The Godfather - Part III
-    Location:   /media/b/movies/The Godfather - Part III
-    Size:       20479.8 MB
-    Files:      The Godfather - Part III.mkv
+* Run `mov ls | less` to browse a large number of movies more comfortably. You
+  can use `j` to go down and `k` to go up. Use `/pattern` to search for a
+  movie.
+* Run `mov ls --name | wc -l` to count the number of movies in your database.
+* Run `mov ls | grep pattern` to search for "pattern".
+* Run `mov ls -S --prefix G | awk '{s += $1} END {print s}'` to show the
+  total size of the movie collection in gibibytes.
 
-Only list the exact match:
-
-    mov ls --strict The Godfather
-    Name:       The Godfather
-    Location:   /media/b/movies/The Godfather
-    Size:       20544.9 MB
-    Files:      The Godfather.mkv
-
-Play a movie (opens the first matching movie with a media player, VLC by
-default):
-
-    mov play -s The Godfather
-
-As the program is still under development, some features have not yet been
-fully developed. You can find out what can be done at this point in time by
-running `mov -h`:
+## Available commands and options
 
     Usage:
       mov create [options] DIRECTORY ...
@@ -119,18 +83,6 @@ running `mov -h`:
       --player=PLAYER      Media player to open movies with [default: vlc].
       -h, --help           Show this help message and exit.
       --version            Show version.
-
-## Unix trickery
-
-**mov** is desinged in such a way as to be usable with standard Unix utilities.
-
-* Run `mov ls | less` to browse a large number of movies more comfortably. You
-  can use `j` to go down and `k` to go up. Use `/pattern` to search for a
-  movie.
-* Run `mov ls --name | wc -l` to count the number of movies in your database.
-* Run `mov ls | grep pattern` to search for "pattern".
-* Run `mov ls -S --prefix G | awk '{s += $1} END {print s}'` to show the
-  total size of the movie collection in gibibytes.
 
 ## To do
 
