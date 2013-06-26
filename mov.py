@@ -156,7 +156,7 @@ def play():
             cursor.execute('SELECT * FROM Movies WHERE Name LIKE (?)',
                            [ARGS.pattern])
             try:
-                path = [row for row in cursor][0][1]
+                path = sorted([row for row in cursor])[0][1]
                 replace_map = {' ': '\\ ', '"': '\\"', "'": "\\'"}
                 for key, val in replace_map.iteritems():
                     path = path.replace(key, val)
