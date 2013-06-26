@@ -120,7 +120,7 @@ def ls():
                       [ARGS.pattern])
         else:
             cursor.execute('SELECT * FROM Movies')
-        movies = [row for row in cursor]
+        movies = sorted([row for row in cursor])
     if ARGS.name:
         print '\n'.join([movie[0] for movie in movies])
     elif ARGS.location:
@@ -128,7 +128,7 @@ def ls():
     elif ARGS.size:
         print '\n'.join([prefix_size(int(movie[2])) for movie in movies])
     elif ARGS.files:
-        for movie in sorted(movies):
+        for movie in movies:
             print ', '.join(movie[3].split('##'))
     else:
         for i, movie in enumerate(movies):
