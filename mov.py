@@ -30,6 +30,7 @@ Options:
   -l, --location       Only show the location of the movie.
   -S, --size           Only show the size of the movie.
   -f, --files          Only show the files of the movie.
+  --prefix=PREFIX      Size prefix, one of none, k, M, G or T [default: None].
   --player=PLAYER      Media player to open movies with [default: vlc].
   -h, --help           Show this help message and exit.
   --version            Show version.
@@ -68,9 +69,13 @@ def local_data(path):
 
 def prefix_size(size, base=1024):
     '''Return size in B (bytes), kB, MB, GB or TB.'''
-    for i, p in enumerate(['', 'ki', 'Mi', 'Gi', 'Ti']):
-        if size < pow(base, i + 1):
-            return '{0} {1}B'.format(round(float(size) / pow(base, i), 1), p)
+    if ARGS.prefix == 'None':
+        p = '{0} MB'.format(round(float(size) / pow(base, 2), 1))
+    else:
+        prefix = {'': 0, 'k': 1, 'M': 2, 'G': 3, 'T': 4}[ARGS.prefix]
+        p = '{0} {1}B'.format(round(float(size) / pow(base, prefix), 1),
+                              ARGS.prefix)
+    return p
 
 
 def create():
@@ -165,7 +170,7 @@ def main():
     args_dict = docopt(__doc__, version='mov {0}'.format(__version__))
     global ARGS
     # Clean key names for later namespace use.
-    ARGS = {arg.lower().replace('--', ''): args_dict[arg] for arg in args_dict}
+    ARGS = {arg.lower().replace('-', ''): args_dict[arg] for arg in args_dict}
     # Make arguments available in a namespace.
     ARGS = type('Namespace', (object,), ARGS)
     # Resolve ~ to the user's home directory if applicable.
