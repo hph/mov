@@ -40,6 +40,49 @@ specify it explicitly with the `--database` option.
 
 ## Usage
 
+Create a new database for your movies collection, assuming it is located in the
+directory as specified below:
+
+    mov create /home/$USER/Movies
+
+List movies:
+
+    mov ls | less
+
+This allows you to browse your movies with the keys `j` and `k` and search with
+`/` and `?`. Press `q` to quit. Get more info by running `man less`.
+
+List movies matching a pattern (quotes around the name are not required):
+
+    mov ls The Godfather
+    Name:       The Godfather
+    Location:   /media/b/movies/The Godfather
+    Size:       20544.9 MB
+    Files:      The Godfather.mkv
+
+    Name:       The Godfather - Part II
+    Location:   /media/b/movies/The Godfather - Part II
+    Size:       20591.0 MB
+    Files:      The Godfather - Part II.mkv
+
+    Name:       The Godfather - Part III
+    Location:   /media/b/movies/The Godfather - Part III
+    Size:       20479.8 MB
+    Files:      The Godfather - Part III.mkv
+
+Only list the exact match:
+
+    mov ls --strict The Godfather
+    Name:       The Godfather
+    Location:   /media/b/movies/The Godfather
+    Size:       20544.9 MB
+    Files:      The Godfather.mkv
+
+Play a movie (opens the first matching movie with a media player, VLC by
+default):
+
+    mov play -s The Godfather
+
 As the program is still under development, some features have not yet been
 fully developed. You can find out what can be done at this point in time by
 running `mov -h`:
@@ -72,6 +115,7 @@ running `mov -h`:
       -l, --location       Only show the location of the movie.
       -S, --size           Only show the size of the movie.
       -f, --files          Only show the files of the movie.
+      --prefix=PREFIX      Size prefix, one of none, k, M, G or T [default: None].
       --player=PLAYER      Media player to open movies with [default: vlc].
       -h, --help           Show this help message and exit.
       --version            Show version.
@@ -85,6 +129,8 @@ running `mov -h`:
   movie.
 * Run `mov ls --name | wc -l` to count the number of movies in your database.
 * Run `mov ls | grep pattern` to search for "pattern".
+* Run `mov ls -S --prefix G | awk '{s += $1} END {print s}'` to show the
+  total size of the movie collection in gibibytes.
 
 ## To do
 
