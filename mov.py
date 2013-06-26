@@ -30,7 +30,8 @@ Options:
   -l, --location       Only show the location of the movie.
   -S, --size           Only show the size of the movie.
   -f, --files          Only show the files of the movie.
-  --prefix=PREFIX      Size prefix, one of none, k, M, G or T [default: None].
+  --prefix=PREFIX      Size prefix, one of "", k, M, G or T. If this option is
+                       not used the best prefix in each case is selected.
   --player=PLAYER      Media player to open movies with [default: vlc].
   -h, --help           Show this help message and exit.
   --version            Show version.
@@ -70,12 +71,17 @@ def local_data(path):
 def prefix_size(size, base=1024):
     '''Return size in B (bytes), kB, MB, GB or TB.'''
     if ARGS.prefix == 'None':
-        p = '{0} MB'.format(round(float(size) / pow(base, 2), 1))
+        for i, prefix in enumerate(['', 'ki', 'Mi', 'Gi', 'Ti']):
+            if size < pow(base, i + 1):
+                return '{0} {1}B'.format(round(float(size) / pow(base, i), 1),
+                                         prefix)
     else:
-        prefix = {'': 0, 'k': 1, 'M': 2, 'G': 3, 'T': 4}[ARGS.prefix]
-        p = '{0} {1}B'.format(round(float(size) / pow(base, prefix), 1),
-                              ARGS.prefix)
-    return p
+        try:
+            prefix = {'': 0, 'k': 1, 'M': 2, 'G': 3, 'T': 4}[ARGS.prefix]
+        except KeyError:
+            exit('Invalid prefix.')
+        return '{0} {1}B'.format(round(float(size) / pow(base, prefix), 1),
+                                 ARGS.prefix)
 
 
 def create():
