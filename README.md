@@ -9,8 +9,8 @@ mov
 
 ## Setup
 
-Run the following commands to download and install **mov**. You may be required
-to enter your password.
+You can run the following command to download and install **mov** on a Unix
+system. 
 
     bash <(wget -qO- https://raw.github.com/hph/mov/master/setup.sh)
 
