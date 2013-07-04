@@ -31,7 +31,8 @@ Options:
   -S, --size           Only show the size of the movie.
   -f, --files          Only show the files of the movie.
   --prefix=PREFIX      Size prefix, one of "", k, M, G or T. If this option is
-                       not used the best prefix in each case is selected.
+                       not used the best prefix in each case is selected
+                       [default: G].
   --player=PLAYER      Media player to open movies with [default: vlc].
   -h, --help           Show this help message and exit.
   --version            Show version.
@@ -128,7 +129,7 @@ def ls():
             if not ARGS.strict:
                 ARGS.pattern = '%{0}%'.format(ARGS.pattern)
             cursor.execute('SELECT * FROM Movies WHERE Name LIKE (?)',
-                      [ARGS.pattern])
+                           [ARGS.pattern])
         else:
             cursor.execute('SELECT * FROM Movies')
         movies = sorted([row for row in cursor])
